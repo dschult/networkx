@@ -544,7 +544,7 @@ def node_clique_number(G,nodes=None,cliques=None):
         cliques=list(find_cliques(G))
 
     if nodes is None:
-        nodes=G.nodes()   # none, get entire graph
+        nodes=list(G.nodes())   # none, get entire graph
 
     if not isinstance(nodes, list):   # check for a list
         v=nodes
@@ -582,7 +582,7 @@ def number_of_cliques(G,nodes=None,cliques=None):
         cliques=list(find_cliques(G))
 
     if nodes is None:
-        nodes=G.nodes()   # none, get entire graph
+        nodes=list(G.nodes())   # none, get entire graph
 
     if not isinstance(nodes, list):   # check for a list
         v=nodes
@@ -605,7 +605,7 @@ def cliques_containing_node(G,nodes=None,cliques=None):
         cliques=list(find_cliques(G))
 
     if nodes is None:
-        nodes=G.nodes()   # none, get entire graph
+        nodes=list(G.nodes())   # none, get entire graph
 
     if not isinstance(nodes, list):   # check for a list
         v=nodes
