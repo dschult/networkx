@@ -152,6 +152,7 @@ def pseudo_peripheral_node(G):
     # helper for cuthill-mckee to find a node in a "pseudo peripheral pair"
     # to use as good starting node
     u = arbitrary_element(G)
+    u = next(G.nodes())
     lp = 0
     v = u
     while True:

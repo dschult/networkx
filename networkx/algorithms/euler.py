@@ -45,7 +45,7 @@ def is_eulerian(G):
     """
     if G.is_directed():
         # Every node must have equal in degree and out degree
-        for n in G.nodes_iter():
+        for n in G.nodes():
             if G.in_degree(n) != G.out_degree(n):
                 return False
         # Must be strongly connected
