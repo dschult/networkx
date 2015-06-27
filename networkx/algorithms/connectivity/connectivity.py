@@ -326,9 +326,8 @@ def node_connectivity(G, s=None, t=None, flow_func=None):
     kwargs = dict(flow_func=flow_func, auxiliary=H, residual=R)
 
     # Pick a node with minimum degree
-    v, minimum_degree = min(G.degree().items(), key=itemgetter(1))
     # Node connectivity is bounded by degree.
-    K = minimum_degree
+    v, K = min(G.degree(), key=itemgetter(1))
     # compute local node connectivity with all its non-neighbors nodes
     for w in set(G) - set(neighbors(v)) - set([v]):
         kwargs['cutoff'] = K
@@ -752,7 +751,7 @@ def edge_connectivity(G, s=None, t=None, flow_func=None):
             return 0
 
         # initial value for \lambda is minimum degree
-        L = min(G.degree().values())
+        L = min(d for n, d in G.degree())
         nodes = list(G)
         n = len(nodes)
         for i in range(n):
@@ -770,7 +769,7 @@ def edge_connectivity(G, s=None, t=None, flow_func=None):
             return 0
 
         # initial value for \lambda is minimum degree
-        L = min(G.degree().values())
+        L = min(d for n, d in G.degree())
         # A dominating set is \lambda-covering
         # We need a dominating set with at least two nodes
         for node in G:
