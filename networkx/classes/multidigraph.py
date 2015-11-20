@@ -38,6 +38,7 @@ class MultiDiGraph(MultiGraph,DiGraph):
         NetworkX graph object.  If the corresponding optional Python
         packages are installed the data can also be a NumPy matrix
         or 2d ndarray, a SciPy sparse matrix, or a PyGraphviz graph.
+
     attr : keyword arguments, optional (default= no attributes)
         Attributes to add to graph as key=value pairs.
 
@@ -176,10 +177,10 @@ class MultiDiGraph(MultiGraph,DiGraph):
     **Subclasses (Advanced):**
 
     The MultiDiGraph class uses a dict-of-dict-of-dict-of-dict structure.
-    The outer dict (node_dict) holds adjacency lists keyed by node.
-    The next dict (adjlist) represents the adjacency list and holds
+    The outer dict (node_dict) holds adjacency information keyed by node.
+    The next dict (adjlist_dict) represents the adjacency information and holds
     edge_key dicts keyed by neighbor. The edge_key dict holds each edge_attr
-    dict keyed by edge key. The inner dict (edge_attr) represents
+    dict keyed by edge key. The inner dict (edge_attr_dict) represents
     the edge data and holds edge attribute values keyed by attribute names.
 
     Each of these four dicts in the dict-of-dict-of-dict-of-dict
@@ -193,7 +194,7 @@ class MultiDiGraph(MultiGraph,DiGraph):
 
     node_dict_factory : function, (default: dict)
         Factory function to be used to create the outer-most dict
-        in the data structure that holds adjacency lists keyed by node.
+        in the data structure that holds adjacency info keyed by node.
         It should require no arguments and return a dict-like object.
 
     adjlist_dict_factory : function, (default: dict)
@@ -213,7 +214,7 @@ class MultiDiGraph(MultiGraph,DiGraph):
 
     Examples
     --------
-    Create a multigraph object that tracks the order nodes are added.
+    Create a multigraph subclass that tracks the order nodes are added.
 
     >>> from collections import OrderedDict
     >>> class OrderedGraph(nx.MultiDiGraph):
@@ -263,7 +264,7 @@ class MultiDiGraph(MultiGraph,DiGraph):
 
         Parameters
         ----------
-        u,v : nodes
+        u, v : nodes
             Nodes can be, for example, strings or numbers.
             Nodes must be hashable (and not None) Python objects.
         key : hashable identifier, optional (default=lowest unused integer)
@@ -350,7 +351,7 @@ class MultiDiGraph(MultiGraph,DiGraph):
 
         Parameters
         ----------
-        u,v: nodes
+        u, v : nodes
             Remove an edge between nodes u and v.
         key : hashable identifier, optional (default=None)
             Used to distinguish multiple edges between a pair of nodes.
@@ -431,7 +432,7 @@ class MultiDiGraph(MultiGraph,DiGraph):
         Returns
         -------
         edge : iterator
-            An iterator of (u,v), (u,v,d) or (u,v,key,d) tuples of edges.
+            An iterator over (u,v), (u,v,d) or (u,v,key,d) tuples of edges.
 
         Notes
         -----
@@ -505,11 +506,11 @@ class MultiDiGraph(MultiGraph,DiGraph):
         Returns
         -------
         in_edge : iterator
-            An iterator of (u,v), (u,v,d) or (u,v,key,d) tuples of edges.
+            An iterator over (u,v), (u,v,d) or (u,v,key,d) tuples of edges.
 
         See Also
         --------
-        edges : return an iterator of edges
+        edges : return an iterator over edges
         """
         if nbunch is None:
             nodes_nbrs = self.pred.items()
@@ -554,11 +555,11 @@ class MultiDiGraph(MultiGraph,DiGraph):
         Returns
         -------
         If a single nodes is requested
-        deg:
+        deg : int
             Degree of the node
 
         OR if multiple nodes are requested
-        nd_iter : an iterator
+        nd_iter : iterator
             The iterator returns two-tuples of (node, degree).
 
         See Also
@@ -637,11 +638,11 @@ class MultiDiGraph(MultiGraph,DiGraph):
         Returns
         -------
         If a single node is requested
-        deg:
+        deg : int
             Degree of the node
 
         OR if multiple nodes are requested
-        nd_iter : an iterator
+        nd_iter : iterator
             The iterator returns two-tuples of (node, in-degree).
 
         See Also
@@ -707,11 +708,11 @@ class MultiDiGraph(MultiGraph,DiGraph):
         Returns
         -------
         If a single node is requested
-        deg:
+        deg : int
             Degree of the node
 
         OR if multiple nodes are requested
-        nd_iter : an iterator
+        nd_iter : iterator
             The iterator returns two-tuples of (node, out-degree).
 
         See Also

@@ -37,6 +37,7 @@ class MultiGraph(Graph):
         NetworkX graph object.  If the corresponding optional Python
         packages are installed the data can also be a NumPy matrix
         or 2d ndarray, a SciPy sparse matrix, or a PyGraphviz graph.
+
     attr : keyword arguments, optional (default= no attributes)
         Attributes to add to graph as key=value pairs.
 
@@ -177,10 +178,10 @@ class MultiGraph(Graph):
     **Subclasses (Advanced):**
 
     The MultiGraph class uses a dict-of-dict-of-dict-of-dict data structure.
-    The outer dict (node_dict) holds adjacency lists keyed by node.
-    The next dict (adjlist) represents the adjacency list and holds
+    The outer dict (node_dict) holds adjacency information keyed by node.
+    The next dict (adjlist_dict) represents the adjacency information and holds
     edge_key dicts keyed by neighbor. The edge_key dict holds each edge_attr
-    dict keyed by edge key. The inner dict (edge_attr) represents
+    dict keyed by edge key. The inner dict (edge_attr_dict) represents
     the edge data and holds edge attribute values keyed by attribute names.
 
     Each of these four dicts in the dict-of-dict-of-dict-of-dict
@@ -194,7 +195,7 @@ class MultiGraph(Graph):
 
     node_dict_factory : function, (default: dict)
         Factory function to be used to create the outer-most dict
-        in the data structure that holds adjacency lists keyed by node.
+        in the data structure that holds adjacency info keyed by node.
         It should require no arguments and return a dict-like object.
 
     adjlist_dict_factory : function, (default: dict)
@@ -214,7 +215,7 @@ class MultiGraph(Graph):
 
     Examples
     --------
-    Create a multigraph object that tracks the order nodes are added.
+    Create a multigraph subclass that tracks the order nodes are added.
 
     >>> from collections import OrderedDict
     >>> class OrderedGraph(nx.MultiGraph):
@@ -264,7 +265,7 @@ class MultiGraph(Graph):
 
         Parameters
         ----------
-        u,v : nodes
+        u, v : nodes
             Nodes can be, for example, strings or numbers.
             Nodes must be hashable (and not None) Python objects.
         key : hashable identifier, optional (default=lowest unused integer)
@@ -424,7 +425,7 @@ class MultiGraph(Graph):
 
         Parameters
         ----------
-        u,v: nodes
+        u, v : nodes
             Remove an edge between nodes u and v.
         key : hashable identifier, optional (default=None)
             Used to distinguish multiple edges between a pair of nodes.
@@ -533,7 +534,7 @@ class MultiGraph(Graph):
 
         Parameters
         ----------
-        u,v : nodes
+        u, v : nodes
             Nodes can be, for example, strings or numbers.
 
         key : hashable identifier, optional (default=None)
@@ -607,7 +608,7 @@ class MultiGraph(Graph):
         Returns
         -------
         edge : iterator
-            An iterator of (u,v), (u,v,d) or (u,v,key,d) tuples of edges.
+            An iterator over (u,v), (u,v,d) or (u,v,key,d) tuples of edges.
 
         Notes
         -----
@@ -672,9 +673,11 @@ class MultiGraph(Graph):
 
         Parameters
         ----------
-        u,v : nodes
-        default:  any Python object (default=None)
+        u, v : nodes
+
+        default :  any Python object (default=None)
             Value to return if the edge (u,v) is not found.
+
         key : hashable identifier, optional (default=None)
             Return data only for the edge with specified key.
 
@@ -742,11 +745,11 @@ class MultiGraph(Graph):
         Returns
         -------
         If a single node is requested
-        deg:
+        deg : int
             Degree of the node, if a single node is passed as argument.
 
         OR if multiple nodes are requested
-        nd_iter : an iterator
+        nd_iter : iterator
             The iterator returns two-tuples of (node, degree).
 
         Examples
@@ -927,7 +930,7 @@ class MultiGraph(Graph):
 
         Parameters
         ----------
-        u,v : nodes, optional (default=all edges)
+        u, v : nodes, optional (default=all edges)
             If u and v are specified, return the number of edges between
             u and v. Otherwise return the total number of all edges.
 

@@ -8,10 +8,11 @@
 #    All rights reserved.
 #    BSD license.
 import heapq
-from itertools import combinations, permutations
+from itertools import combinations
 import math
 from operator import itemgetter
 import random
+
 import networkx as nx
 from networkx.utils import random_weighted_sample
 
@@ -106,8 +107,9 @@ def configuration_model(deg_sequence,create_using=None,seed=None):
 
     >>> G.remove_edges_from(G.selfloop_edges())
     """
-    if not sum(deg_sequence)%2 ==0:
-        raise nx.NetworkXError('Invalid degree sequence')
+    if sum(deg_sequence) % 2 != 0:
+        msg = 'Invalid degree sequence: sum of degrees must be even, not odd'
+        raise nx.NetworkXError(msg)
 
     if create_using is None:
         create_using = nx.MultiGraph()
@@ -447,7 +449,7 @@ def havel_hakimi_graph(deg_sequence,create_using=None):
     while n > 0:
         # Retrieve the maximum degree in the sequence
         while len(num_degs[dmax]) == 0:
-            dmax -= 1;
+            dmax -= 1
         # If there are not enough stubs to connect to, then the sequence is
         # not graphical
         if dmax > n-1:
@@ -750,15 +752,13 @@ class DegreeSequenceRandomGraph(object):
         return self.remaining_degree[u]*self.remaining_degree[v]/norm
 
     def suitable_edge(self):
-        # Check if there is a suitable edge that is not in the graph
-        # True if an (arbitrary) remaining node has at least one possible 
-        # connection to another remaining node
+        """Returns ``True`` if and only if an arbitrary remaining node can
+        potentially be joined with some other remaining node.
+
+        """
         nodes = iter(self.remaining_degree)
-        u = next(nodes) # one arbitrary node
-        for v in nodes: # loop over all other remaining nodes
-            if not self.graph.has_edge(u, v):
-                return True
-        return False
+        u = next(nodes)
+        return any(v not in self.graph[u] for v in nodes)
 
     def phase1(self):
         # choose node pairs from (degree) weighted distribution

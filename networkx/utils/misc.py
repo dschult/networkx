@@ -14,8 +14,10 @@ True
 #    Pieter Swart <swart@lanl.gov>
 #    All rights reserved.
 #    BSD license.
+import collections
 import sys
 import uuid
+from itertools import tee
 # itertools.accumulate is only available on Python 3.2 or later.
 #
 # Once support for Python versions less than 3.2 is dropped, this code should
@@ -39,7 +41,6 @@ except ImportError:
             total = func(total, element)
             yield total
 
-import networkx as nx
 
 __author__ = '\n'.join(['Aric Hagberg (hagberg@lanl.gov)',
                         'Dan Schult(dschult@colgate.edu)',
@@ -175,3 +176,52 @@ def dict_to_numpy_array1(d,mapping=None):
         i = mapping[k1]
         a[i] = d[k1]
     return a
+
+def is_iterator(obj):
+    """Returns ``True`` if and only if the given object is an iterator
+    object.
+
+    """
+    has_next_attr = hasattr(obj, '__next__') or hasattr(obj, 'next')
+    return iter(obj) is obj and has_next_attr
+
+
+def arbitrary_element(iterable):
+    """Returns an arbitrary element of ``iterable`` without removing it.
+
+    This is most useful for "peeking" at an arbitrary element of a set,
+    but can be used for any list, dictionary, etc., as well::
+
+        >>> arbitrary_element({3, 2, 1})
+        1
+        >>> arbitrary_element('hello')
+        'h'
+
+    This function raises a :exc:`ValueError` if ``iterable`` is an
+    iterator (because the current implementation of this function would
+    consume an element from the iterator)::
+
+        >>> iterator = iter([1, 2, 3])
+        >>> arbitrary_element(iterator)
+        Traceback (most recent call last):
+            ...
+        ValueError: cannot return an arbitrary item from an iterator
+
+    """
+    if is_iterator(iterable):
+        raise ValueError('cannot return an arbitrary item from an iterator')
+    # Another possible implementation is `for x in iterable: return x`.
+    return next(iter(iterable))
+
+# Recipe from the itertools documentation.
+def consume(iterator):
+    "Consume the iterator entirely."
+    # Feed the entire iterator into a zero-length deque.
+    collections.deque(iterator, maxlen=0)
+
+# Recipe from the itertools documentation.
+def pairwise(iterable):
+    "s -> (s0, s1), (s1, s2), (s2, s3), ..."
+    a, b = tee(iterable)
+    next(b, None)
+    return zip(a, b)

@@ -13,8 +13,10 @@ __all__ = ['capacity_scaling']
 from itertools import chain
 from math import log
 import networkx as nx
-from networkx.utils import *
-
+from ...utils import BinaryHeap
+from ...utils import generate_unique_node
+from ...utils import not_implemented_for
+from ...utils import arbitrary_element
 
 def _detect_unboundedness(R):
     """Detect infinite-capacity negative cycles.
@@ -128,7 +130,7 @@ def _build_flow_dict(G, R, capacity, weight):
 
 def capacity_scaling(G, demand='demand', capacity='capacity', weight='weight',
                      heap=BinaryHeap):
-    """Find a minimum cost flow satisfying all demands in digraph G.
+    r"""Find a minimum cost flow satisfying all demands in digraph G.
 
     This is a capacity scaling successive shortest augmenting path algorithm.
 
@@ -178,16 +180,14 @@ def capacity_scaling(G, demand='demand', capacity='capacity', weight='weight',
 
     Returns
     -------
-    flowCost: integer
+    flowCost : integer
         Cost of a minimum cost flow satisfying all demands.
 
-    flowDict: dictionary
-        Dictionary of dictionaries keyed by nodes such that
-        flowDict[u][v] is the flow edge (u, v) if G is a digraph.
-
-        Dictionary of dictionaries of dictionaries keyed by nodes such that
-        flowDict[u][v][key] is the flow edge (u, v, key) if G is a
-        multidigraph.
+    flowDict : dictionary
+        If G is a digraph, a dict-of-dicts keyed by nodes such that
+        flowDict[u][v] is the flow on edge (u, v).
+        If G is a MultiDiGraph, a dict-of-dicts-of-dicts keyed by nodes
+        so that flowDict[u][v][key] is the flow on edge (u, v, key).
 
     Raises
     ------
@@ -197,6 +197,7 @@ def capacity_scaling(G, demand='demand', capacity='capacity', weight='weight',
 
     NetworkXUnfeasible
         This exception is raised in the following situations:
+
             * The sum of the demands is not zero. Then, there is no
               flow satisfying all demands.
             * There is no flow satisfying all demand.
@@ -308,7 +309,7 @@ def capacity_scaling(G, demand='demand', capacity='capacity', weight='weight',
         # Repeatedly augment flow from S to T along shortest paths until
         # Δ-feasibility is achieved.
         while S and T:
-            s = next(iter(S))
+            s = arbitrary_element(S)
             t = None
             # Search for a shortest path in terms of reduce costs from s to
             # any t in T in the Δ-residual network.
