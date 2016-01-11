@@ -2,5 +2,5 @@
 
 from .layout import *
 from .nx_pylab import *
-import nx_agraph
-import nx_pydot
+from . import nx_agraph
+from . import nx_pydot
