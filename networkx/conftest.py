@@ -247,6 +247,7 @@ except ImportError:
 collect_ignore = []
 
 needs_numpy = [
+    "algorithms/approximation/traveling_salesman.py",
     "algorithms/centrality/current_flow_closeness.py",
     "algorithms/node_classification/__init__.py",
     "algorithms/non_randomness.py",
@@ -256,6 +257,7 @@ needs_numpy = [
     "utils/misc.py",
 ]
 needs_scipy = [
+    "algorithms/approximation/traveling_salesman.py",
     "algorithms/assortativity/correlation.py",
     "algorithms/assortativity/mixing.py",
     "algorithms/assortativity/pairs.py",
@@ -270,6 +272,7 @@ needs_scipy = [
     "algorithms/communicability_alg.py",
     "algorithms/link_analysis/hits_alg.py",
     "algorithms/link_analysis/pagerank_alg.py",
+    "algorithms/node_classification/__init__.py",
     "algorithms/node_classification/hmn.py",
     "algorithms/node_classification/lgc.py",
     "algorithms/similarity.py",
@@ -278,6 +281,7 @@ needs_scipy = [
     "generators/spectral_graph_forge.py",
     "linalg/algebraicconnectivity.py",
     "linalg/attrmatrix.py",
+    "linalg/bethehessianmatrix.py",
     "linalg/graphmatrix.py",
     "linalg/modularitymatrix.py",
     "linalg/spectrum.py",

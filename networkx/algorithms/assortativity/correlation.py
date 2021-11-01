@@ -75,9 +75,27 @@ def degree_assortativity_coefficient(G, x="out", y="in", weight=None, nodes=None
     """
     if nodes is None:
         nodes = G.nodes
-    degrees = set([d for n, d in G.degree(nodes, weight=weight)])
+
+    degrees = None
+
+    if G.is_directed():
+        indeg = (
+            {d for _, d in G.in_degree(nodes, weight=weight)}
+            if "in" in (x, y)
+            else set()
+        )
+        outdeg = (
+            {d for _, d in G.out_degree(nodes, weight=weight)}
+            if "out" in (x, y)
+            else set()
+        )
+        degrees = set.union(indeg, outdeg)
+    else:
+        degrees = {d for _, d in G.degree(nodes, weight=weight)}
+
     mapping = {d: i for i, d, in enumerate(degrees)}
     M = degree_mixing_matrix(G, x=x, y=y, nodes=nodes, weight=weight, mapping=mapping)
+
     return numeric_ac(M, mapping=mapping)
 
 
@@ -219,8 +237,8 @@ def numeric_assortativity_coefficient(G, attribute, nodes=None):
 
     Notes
     -----
-    This computes Eq. (21) in Ref. [1]_ , for the mixing matrix
-    of the specified attribute.
+    This computes Eq. (21) in Ref. [1]_ , which is the Pearson correlation
+    coefficient of the specified (scalar valued) attribute across edges.
 
     References
     ----------
@@ -229,7 +247,7 @@ def numeric_assortativity_coefficient(G, attribute, nodes=None):
     """
     if nodes is None:
         nodes = G.nodes
-    vals = set(G.nodes[n][attribute] for n in nodes)
+    vals = {G.nodes[n][attribute] for n in nodes}
     mapping = {d: i for i, d, in enumerate(vals)}
     M = attribute_mixing_matrix(G, attribute, nodes, mapping)
     return numeric_ac(M, mapping)
