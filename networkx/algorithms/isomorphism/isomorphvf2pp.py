@@ -493,7 +493,7 @@ class vf2pp:
     ###########################################################################
 
     def _is_isomorphic(self):
-        """ Starts of the isomorphic check. Uses _is_isomorphic_helper"""
+        """Starts of the isomorphic check. Uses _is_isomorphic_helper"""
         return self._is_isomorphic_helper(0)
 
     def _is_isomorphic_helper(self, depth):
@@ -577,7 +577,7 @@ class vf2pp:
         return False
 
     def _is_induced_subgraph(self):
-        """ Starts of the induced subgraph check. Uses _is_is_helper"""
+        """Starts of the induced subgraph check. Uses _is_is_helper"""
         return self._is_is_helper(0)
 
     def _is_is_helper(self, depth):
@@ -661,7 +661,7 @@ class vf2pp:
         return False
 
     def _is_subgraph(self):
-        """ Starts of the subgraph check. Uses _is_s_helper"""
+        """Starts of the subgraph check. Uses _is_s_helper"""
         return self._is_s_helper(0)
 
     def _is_s_helper(self, depth):
