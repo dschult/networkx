@@ -8,7 +8,7 @@ import random
 
 import networkx as nx
 from networkx.algorithms import isomorphism as iso
-
+iso.vf2pp = iso.GraphMatcher_vf2pp
 
 class TestWikipediaExample:
     # Source: https://en.wikipedia.org/wiki/Graph_isomorphism
