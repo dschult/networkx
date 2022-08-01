@@ -20,13 +20,13 @@ class vf2pp:
         # Set the self variables to be accessed in other functions
         self.G1 = G1
         self.G2 = G2
-        self.V1 = set(G1.nodes())
-        self.V2 = set(G2.nodes())
+        self.V1 = set(G1.nodes)
+        self.V2 = set(G2.nodes)
         self.label = label
 
         # Dictionaries containing the labels of each node
-        self.G1_labels = nx.get_node_attributes(G1, label)
-        self.G2_labels = nx.get_node_attributes(G2, label)
+        self.G1_labels = {n: d.get(label) for n, d in G1.nodes.items()}
+        self.G2_labels = {n: d.get(label) for n, d in G2.nodes.items()}
 
         # Get the matching order
         self.G1_node_order = self._matching_order()
@@ -121,9 +121,7 @@ class vf2pp:
 
             f_m_labels[min_label] -= 1
 
-            m = min_nodes[0]
-
-            order[num_in_order] = m
+            order[num_in_order] = m = min_nodes[0]
             num_in_order += 1
 
             for node in self.G1.neighbors(m):
@@ -138,6 +136,8 @@ class vf2pp:
         and 3 from the VF2++ paper.
         """
         # Get the set of all nodes so we can remove once they're added:
+        print(self.V1)
+        print(self.G1_labels)
         V1_not_in_order = self.V1.copy()
 
         # Create an empty mapping to add to, and an index variable to keep track of where we are
@@ -185,12 +185,15 @@ class vf2pp:
             T_edges = list(nx.bfs_edges(self.G1, max_node))
             current_depth_nodes = []
 
+            #            for edge in T_edges:
+            #                if edge[0] not in current_depth_nodes:
+            #                    current_depth_nodes.append(edge[1])
+            #                else:
             for node_num in range(len(T_edges)):
 
-                if (
-                    T_edges[node_num][0] not in current_depth_nodes
-                ):  # Keep going until you get the entire depth
-                    current_depth_nodes += [T_edges[node_num][1]]
+                # Keep going until you get the entire depth
+                if T_edges[node_num][0] not in current_depth_nodes:
+                    current_depth_nodes.append(T_edges[node_num][1])
 
                 else:  # process this level and then initalize the next one
 

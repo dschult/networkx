@@ -353,7 +353,7 @@ def test_selfloop_mono():
 #        else:
 #            gmA = iso.DiGraphMatcher(g1, g2)
 #            gmB = iso.DiGraphMatcher(g1, g3)
-#        assert gmA.is_isomorphic()
+#        assert gmA._is_isomorphic()
 #        g2.remove_node("C")
 #        if not g1.is_directed():
 #            gmA = iso.GraphMatcher(g1, g2)
@@ -379,7 +379,7 @@ def test_noncomparable_nodes():
     # Graph
     G = nx.path_graph([node1, node2, node3])
     gm = iso.vf2pp(G, G, "label")
-    assert gm.is_isomorphic()
+    assert gm._is_isomorphic()
     # Just testing some cases
     assert gm._is_subgraph()
 
@@ -389,7 +389,7 @@ def test_noncomparable_nodes():
 #    H = nx.path_graph([node3, node2, node1], create_using=nx.DiGraph)
 #    #gm = iso.vf2pp(G, H, 'label')
 #    dgm = iso.DiGraphMatcher(G, H)
-#    assert dgm.is_isomorphic()
+#    assert dgm._is_isomorphic()
 #    # Just testing some cases
 #    assert gm._is_subgraph()
 
