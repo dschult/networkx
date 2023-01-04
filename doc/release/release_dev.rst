@@ -70,6 +70,8 @@ Improvements
   ``avg_shortest_path_length`` now raises an exception if the provided
   graph is directed but not strongly connected. The previous test (weak
   connecting) was wrong; in that case, the returned value was nonsensical.
+- [`#6234 <https://github.com/networkx/networkx/pull/6234>`_]
+  Allow MultiDiGraphs for Lowest Common Ancestor
 
 API Changes
 -----------
@@ -215,6 +217,35 @@ A total of 217 changes have been committed.
 - Revert 6219 and delete comment. (#6222)
 - fix wording in error message (#6228)
 - Rm incorrect test case for connected edge swap (#6223)
+- add missing `seed` to function called by `connected_double_edge_swap` (#6231)
+- Hide edges with a weight of None in A*. (#5945)
+- Add dfs_labeled_edges reporting of reverse edges due to depth_limit. (#6240)
+- Warn users about duplicate nodes in generator function input (#6237)
+- Reenable geospatial examples (#6252)
+- Draft 3.0 release notes (#6232)
+- Add 2.8.x release notes (#6255)
+- doc: clarify allowed `alpha` when using nx.draw_networkx_edges (#6254)
+- Add a contributor (#6256)
+- Allow MultiDiGraphs for LCA (#6234)
+- Update simple_paths.py to improve readability of the BFS. (#6273)
+- doc: update documentation when providing an iterator over current graph to add/remove_edges_from. (#6268)
+- Fix bug vf2pp is isomorphic issue 6257 (#6270)
+- Improve test coverage for Eigenvector centrality  (#6227)
+- Bug fix in swap: directed_edge_swap and double_edge_swap  (#6149)
+- Adding a test to verify that a NetworkXError is raised when calling n… (#6265)
+- Pin to sphinx 5.2.3 (#6277)
+- Update pre-commit hooks (#6278)
+- Update GH actions (#6280)
+- Fix links in release notes (#6281)
+- bug fix in smallworld.py: random_reference and lattice_reference (#6151)
+- [DOC] Follow numpydoc standard in barbell_graph documentation (#6286)
+- Update simple_paths.py: consistent behaviour for `is_simple_path` when path contains nodes not in the graph. (#6272)
+- Correctly point towards 2.8.8 in release notes (#6298)
+- Isomorphism improve documentation (#6295)
+- Improvements and test coverage for `line.py` (#6215)
+- Fix typo in Katz centrality comment (#6310)
+- Broken link in isomorphism documentation (#6296)
+- Update copyright years to 2023 (#6322)
 
 
 Contributors
