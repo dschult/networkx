@@ -1213,6 +1213,49 @@ class DiGraph(Graph):
         """
         return OutDegreeView(self)
 
+    def size(self, weight=None):
+        """Returns the number of edges or total of all edge weights.
+
+        Parameters
+        ----------
+        weight : string or None, optional (default=None)
+            The edge attribute that holds the numerical value used
+            as a weight. If None, then each edge has weight 1.
+
+        Returns
+        -------
+        size : numeric
+            The number of edges or
+            (if weight keyword is provided) the total weight sum.
+
+            If weight is None, returns an int. Otherwise a float
+            (or more general numeric if the weights are more general).
+
+        See Also
+        --------
+        number_of_edges
+
+        Examples
+        --------
+        >>> G = nx.path_graph(4)  # or DiGraph, MultiGraph, MultiDiGraph, etc
+        >>> G.size()
+        3
+
+        >>> G = nx.Graph()  # or DiGraph, MultiGraph, MultiDiGraph, etc
+        >>> G.add_edge("a", "b", weight=2)
+        >>> G.add_edge("b", "c", weight=4)
+        >>> G.size()
+        2
+        >>> G.size(weight="weight")
+        6.0
+        """
+        # DiGraph doesn't double count when we sweep across adjacency. So no /2 here.
+        if weight is None:
+            return sum(len(nbrs) for nbrs in self._succ.values())
+        return sum(
+            dd.get(weight, 1) for nbrs in self._succ.values() for dd in nbrs.values()
+        )
+
     def clear(self):
         """Remove all nodes and edges from the graph.
 

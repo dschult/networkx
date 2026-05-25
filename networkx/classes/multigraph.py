@@ -1235,6 +1235,63 @@ class MultiGraph(Graph):
         )
         return G
 
+    def size(self, weight=None):
+        """Returns the number of edges or total of all edge weights.
+
+        Parameters
+        ----------
+        weight : string or None, optional (default=None)
+            The edge attribute that holds the numerical value used
+            as a weight. If None, then each edge has weight 1.
+
+        Returns
+        -------
+        size : numeric
+            The number of edges or
+            (if weight keyword is provided) the total weight sum.
+
+            If weight is None, returns an int. Otherwise a float
+            (or more general numeric if the weights are more general).
+
+        See Also
+        --------
+        number_of_edges
+
+        Examples
+        --------
+        >>> G = nx.path_graph(4)  # or DiGraph, MultiGraph, MultiDiGraph, etc
+        >>> G.size()
+        3
+
+        >>> G = nx.Graph()  # or DiGraph, MultiGraph, MultiDiGraph, etc
+        >>> G.add_edge("a", "b", weight=2)
+        >>> G.add_edge("b", "c", weight=4)
+        >>> G.size()
+        2
+        >>> G.size(weight="weight")
+        6.0
+        """
+        # If `weight` is None, the sum of the degrees is guaranteed to be
+        # even, so we can perform integer division (// 2) and hence return
+        # an integer. Otherwise, the sum of the weighted degrees is not
+        # guaranteed to be an integer, so we perform "real" division (/ 2).
+        if weight is None:
+            return (
+                sum(
+                    sum(len(kd) for kd in nbrs.values()) + (n in nbrs and len(nbrs[n]))
+                    for n, nbrs in self._adj.items()
+                )
+                // 2
+            )
+        return (
+            sum(
+                sum(dd.get(weight, 1) for kd in nbrs.values() for dd in kd.values())
+                + (n in nbrs and sum(dd.get(weight, 1) for dd in nbrs[n].values()))
+                for n, nbrs in self._adj.items()
+            )
+            / 2
+        )
+
     def number_of_edges(self, u=None, v=None):
         """Returns the number of edges between two nodes.
 

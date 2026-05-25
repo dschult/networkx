@@ -1950,12 +1950,16 @@ class Graph:
         >>> G.size(weight="weight")
         6.0
         """
-        s = sum(d for v, d in self.degree(weight=weight))
+        self_adj = self._adj
         # If `weight` is None, the sum of the degrees is guaranteed to be
-        # even, so we can perform integer division and hence return an
-        # integer. Otherwise, the sum of the weighted degrees is not
-        # guaranteed to be an integer, so we perform "real" division.
-        return s // 2 if weight is None else s / 2
+        # even, so we can perform integer division (// 2) and hence return
+        # an integer. Otherwise, the sum of the weighted degrees is not
+        # guaranteed to be an integer, so we perform "real" division (/ 2).
+        if weight is None:
+            s = sum(len(nbrs) + (n in nbrs) for n, nbrs in self_adj.items())
+            return s // 2
+        s = sum(dd.get(weight, 1) for nbrs in self_adj.values() for dd in nbrs.values())
+        return s / 2
 
     def number_of_edges(self, u=None, v=None):
         """Returns the number of edges between two nodes.
