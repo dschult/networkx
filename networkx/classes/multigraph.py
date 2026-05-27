@@ -1271,26 +1271,26 @@ class MultiGraph(Graph):
         >>> G.size(weight="weight")
         6.0
         """
-        # If `weight` is None, the sum of the degrees is guaranteed to be
-        # even, so we can perform integer division (// 2) and hence return
-        # an integer. Otherwise, the sum of the weighted degrees is not
-        # guaranteed to be an integer, so we perform "real" division (/ 2).
+        adjs = self._adj.items()
         if weight is None:
-            return (
-                sum(
-                    sum(len(kd) for kd in nbrs.values()) + (n in nbrs and len(nbrs[n]))
-                    for n, nbrs in self._adj.items()
-                )
-                // 2
-            )
-        return (
-            sum(
-                sum(dd.get(weight, 1) for kd in nbrs.values() for dd in kd.values())
-                + (n in nbrs and sum(dd.get(weight, 1) for dd in nbrs[n].values()))
-                for n, nbrs in self._adj.items()
-            )
-            / 2
+            s = sum(len(kd) for n, nbrs in adjs for kd in nbrs.values())
+            # handle selfloops
+            s += sum(len(nbrs[n]) for n, nbrs in adjs if n in nbrs)
+            return s // 2  # return integer by using //
+
+        s = sum(
+            dd.get(weight, 1)
+            for n, nbrs in adjs
+            for kd in nbrs.values()
+            for dd in kd.values()
         )
+        s += sum(
+            dd.get(weight, 1)
+            for n, nbrs in adjs
+            if n in nbrs
+            for dd in nbrs[n].values()
+        )
+        return s / 2  # not always integer so use /
 
     def number_of_edges(self, u=None, v=None):
         """Returns the number of edges between two nodes.
