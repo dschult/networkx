@@ -206,7 +206,9 @@ def vf2pp_isomorphism(FG, SG, node_label=None, default_label=None):
         Node mapping if the two graphs are isomorphic. None otherwise.
     """
     try:
-        mapping = next(_all_morphisms(FG, SG, node_label, default_label, PT="ISO"))
+        # NOTE: switch FG and SG to retain backward compatible isomorphism mapping
+        # This will need to be changed when we introduce unified api
+        mapping = next(_all_morphisms(SG, FG, node_label, default_label, PT="ISO"))
         return mapping
     except StopIteration:
         return None
@@ -267,7 +269,9 @@ def vf2pp_all_isomorphisms(FG, SG, node_label=None, default_label=None):
     dict
         Isomorphic mapping between the nodes in `SG` and `FG`.
     """
-    yield from _all_morphisms(FG, SG, node_label, default_label, PT="ISO")
+    # NOTE: switch FG and SG to retain backward compatible isomorphism mapping
+    # This will need to be changed when we introduce unified api
+    yield from _all_morphisms(SG, FG, node_label, default_label, PT="ISO")
 
 
 @nx._dispatchable(graphs={"FG": 0, "SG": 1}, node_attrs={"node_label": "default_label"})
