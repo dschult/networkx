@@ -715,19 +715,25 @@ class ISMAGS:
         problem_type : string
             The problem type to be used:
             - "ISO" for graph isomorphism,
+            - "SUB" for subgraph isomorphism,
             - "MONO" for monomorphism.
-            - "SUB" or any other string produces subgraph isomorphism
-            Not checked for correctness.
 
         Yields
         ------
         dict
             The found isomorphism mappings of {graph_node: subgraph_node}.
         """
-        SG_fits = operator.eq if problem_type == "ISO" else operator.le
-        MONO_fits = operator.eq if problem_type != "MONO" else operator.le
-        # The networkx VF2 algorithm is slightly funny in when it yields an
-        # empty dict and when not.
+        if problem_type == "ISO":
+            SG_fits = MONO_fits = operator.eq
+        elif problem_type == "SUB":
+            SG_fits = operator.le
+            MONO_fits = operator.eq
+        elif problem_type == "MONO":
+            SG_fits = MONO_fits = operator.le
+        # private method, so don't check for invalid problem_type
+
+        # NetworkX morphism yields empty mapping when subgraph is empty unless graph
+        # is not empty and problem_type="ISO". That's handled in isomorphisms_iter().
         if not self.subgraph:
             yield {}
             return
