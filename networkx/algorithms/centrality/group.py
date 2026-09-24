@@ -25,7 +25,7 @@ def group_betweenness_centrality(G, C, normalized=True, weight=None, endpoints=F
     r"""Compute the group betweenness centrality for a group of nodes.
 
     Group betweenness centrality of a group of nodes $C$ is the sum of the
-    fraction of all-pairs shortest paths that pass through any vertex in $C$
+    fraction of all-pairs shortest paths that pass through any node in $C$
 
     .. math::
 
@@ -283,11 +283,11 @@ def _group_preprocessing(G, set_v, weight):
 def prominent_group(
     G, k, weight=None, C=None, endpoints=False, normalized=True, greedy=False
 ):
-    r"""Find the prominent group of size $k$ in graph $G$. The prominence of the
-    group is evaluated by the group betweenness centrality.
+    r"""Find the prominent group (and its centrality) of size $k$ in graph $G$.
 
+    The prominent group of nodes has the highest group betweenness centrality.
     Group betweenness centrality of a group of nodes $C$ is the sum of the
-    fraction of all-pairs shortest paths that pass through any vertex in $C$
+    fraction of all-pairs shortest paths that pass through any node in $C$
 
     .. math::
 
@@ -328,18 +328,16 @@ def prominent_group(
        group. For scale free networks the results are negligibly below the optimal
        results.
 
+    Returns
+    -------
+    max_GBC, max_group : 2-tuple of (float, list or nodes)
+       A 2-tuple of the group betweenness centrality of the prominent group,
+       and a list of nodes in the prominent group.
+
     Raises
     ------
     NodeNotFound
-       If node(s) in C are not present in G.
-
-    Returns
-    -------
-    max_GBC : float
-       The group betweenness centrality of the prominent group.
-
-    max_group : list
-        The list of nodes in the prominent group.
+       If any node(s) in C are not present in G.
 
     See Also
     --------
